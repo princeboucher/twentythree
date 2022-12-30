@@ -10,13 +10,13 @@ module.exports = {
     // You can overwrite values here that are used for the SEO component
     // You can also add new values here to query them like usual
     // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.js
-    siteTitle: `Minimal Blog`,
-    siteTitleAlt: `Minimal Blog - Gatsby Theme`,
-    siteHeadline: `Minimal Blog - Gatsby Theme from @lekoarts`,
-    siteUrl: `https://minimal-blog.lekoarts.de`,
-    siteDescription: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and line highlighting.`,
+    siteTitle: `Prince Boucher`,
+    siteTitleAlt: `Prince Boucher - Applied Generalist`,
+    siteHeadline: `Prince Boucher - Artist, activist, and entrepreneur`,
+    siteUrl: `https://princeboucher.com`,
+    siteDescription: `Ideas and projects from the investigations of Prince Boucher.`,
     siteImage: `/banner.jpg`,
-    author: `@lekoarts_de`,
+    author: `@princeboucher`,
   },
   trailingSlash: `never`,
   plugins: [
@@ -26,8 +26,8 @@ module.exports = {
       options: {
         navigation: [
           {
-            title: `Blog`,
-            slug: `/blog`,
+            title: `Colophon`,
+            slug: `/Colophon`,
           },
           {
             title: `About`,
@@ -37,11 +37,11 @@ module.exports = {
         externalLinks: [
           {
             name: `Twitter`,
-            url: `https://twitter.com/lekoarts_de`,
+            url: `https://twitter.com/princeboucher`,
           },
           {
-            name: `Homepage`,
-            url: `https://www.lekoarts.de?utm_source=minimal-blog&utm_medium=Starter`,
+            name: `Instagram`,
+            url: `https://www.instagram.com/princeboucher`,
           },
         ],
       },
