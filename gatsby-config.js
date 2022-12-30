@@ -27,7 +27,11 @@ module.exports = {
         navigation: [
           {
             title: `Colophon`,
-            slug: `/Colophon`,
+            slug: `/blog`,
+          },
+          {
+            title: `Book`,
+            slug: `/book`,
           },
           {
             title: `About`,
