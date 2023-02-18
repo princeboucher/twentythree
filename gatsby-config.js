@@ -138,4 +138,18 @@ module.exports = {
       },
     },
   ].filter(Boolean),
-}
+
+
+
+  {
+    resolve: `gatsby-plugin-google-gtag`,
+    options: {
+      trackingIds: [
+      "G-B4E3Q40Z83", // Google Analytics / GA
+      ],
+      pluginConfig: {
+        // Puts tracking script in the head instead of the body
+        head: true
+      },
+    },
+  }
