@@ -40,7 +40,7 @@ module.exports = {
         ],
         externalLinks: [
           {
-            image: '![Twitter](./twitter.png)'
+            image: '![Twitter](./twitter.png)',
             name: `Twitter`,
             url: `https://twitter.com/princeboucher`,
           },
