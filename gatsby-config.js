@@ -6,7 +6,7 @@ const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
  * @type {import('gatsby').GatsbyConfig}
  */
 module.exports = {
-  siteMetadata: {
+    siteMetadata: {
     // You can overwrite values here that are used for the SEO component
     // You can also add new values here to query them like usual
     // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.js
@@ -99,8 +99,7 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allPost } }) =>
-              allPost.nodes.map((post) => {
+            serialize: ({ query: { site, allPost } }) => allPost.nodes.map((post) => {
                 const url = site.siteMetadata.siteUrl + post.slug
                 const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
 
@@ -137,4 +136,5 @@ module.exports = {
         openAnalyzer: false,
       },
     },
-  ].filter(Boolean),
+  ].filter(Boolean)
+}
