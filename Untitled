@@ -1,0 +1,160 @@
+//
+//  RecordingView.swift
+//  nodev2
+//
+//  Created by Prince Boucher on 4/4/23.
+//
+
+
+import SwiftUI
+import AVFoundation
+import Speech
+
+struct RecordingView: View {
+    @State private var audioRecorder: AVAudioRecorder?
+    @State private var audioPlayer: AVAudioPlayer?
+    @State private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    @State private var recognitionTask: SFSpeechRecognitionTask?
+    private let speechRecognizer = SFSpeechRecognizer()
+    @State private var recordings: [(title: String, date: Date, audioURL: URL, text: String)] = []
+
+    @State private var isRecording = false
+
+
+    // Define the date formatter here
+      private let dateFormatter: DateFormatter = {
+          let formatter = DateFormatter()
+          formatter.dateFormat = "dd/MM/yy HH:mm z"
+          formatter.timeZone = TimeZone.current
+          return formatter
+      }()
+
+    var body: some View {
+        VStack {
+            Button(action: {
+                if !isRecording {
+                    startRecording()
+                } else {
+                    stopRecording()
+                }
+                isRecording.toggle()
+            }) {
+                Image(systemName: "circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(isRecording ? .red : .gray)
+            }
+            .buttonStyle(PlainButtonStyle())
+            List {
+                ForEach(recordings, id: \.title) { recording in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(recording.title)
+                            Text(dateFormatter.string(from:recording.date))
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                            if !recording.text.isEmpty {
+                                Text(recording.text)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 4)
+                                    .padding(.horizontal, 8)
+                                    .background(Color.black)
+                                    .cornerRadius(4)
+                            }
+                        }
+                        Spacer()
+                        Button(action: {
+                            playAudio(url: recording.audioURL)
+                        }) {
+                            Image(systemName: "play.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                        }
+                    }
+                }
+
+            }
+        }
+        .padding()
+    }
+
+    private func startRecording() {
+        let audioSession = AVAudioSession.sharedInstance()
+        try? audioSession.setCategory(.record, mode: .default, options: [])
+        try? audioSession.setActive(true, options: [])
+
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 12000,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+
+        let documentsDirectory = getDocumentsDirectory()
+        let audioFilename = documentsDirectory.appendingPathComponent("recording.m4a")
+
+        do {
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            audioRecorder?.record()
+        } catch {
+            print("Error: Could not start recording")
+        }
+    }
+
+    private func stopRecording() {
+        audioRecorder?.stop()
+        let audioSession = AVAudioSession.sharedInstance()
+        try? audioSession.setActive(false, options: [])
+
+        if let recorder = audioRecorder {
+            let alert = UIAlertController(title: "Add a Title", message: nil, preferredStyle: .alert)
+            alert.addTextField { textField in
+                textField.placeholder = "Title"
+            }
+            alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+                guard let recordingTitle = alert.textFields?.first?.text, !recordingTitle.isEmpty else { return }
+
+                // Add a new alert to prompt for the label
+                let labelAlert = UIAlertController(title: "Add a Label", message: nil, preferredStyle: .alert)
+                labelAlert.addTextField { textField in
+                    textField.placeholder = "Label"
+                }
+                labelAlert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+                    guard let recordingLabel = labelAlert.textFields?.first?.text, !recordingLabel.isEmpty else { return }
+                    DispatchQueue.main.async {
+                        recordings.append((title: recordingTitle, date: Date(), audioURL: recorder.url, text: recordingLabel))
+                    }
+                }))
+                labelAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                UIApplication.shared.windows.first?.rootViewController?.present(labelAlert, animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
+        }
+    }
+
+
+
+    private func playAudio(url: URL) {
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            print("Error: Could not play audio")
+        }
+    }
+
+    private func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+
+    private func formatDate(_ date: Date) -> String {
+          let dateFormatter = DateFormatter()
+          dateFormatter.dateFormat = "dd/MM/yy HH:mm z"
+          dateFormatter.timeZone = TimeZone.current
+          return dateFormatter.string(from: date)
+      }
+}
