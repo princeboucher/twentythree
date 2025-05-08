@@ -82,6 +82,22 @@ module.exports = {
         ],
       },
     },
+
+    {
+  resolve: `gatsby-plugin-google-gtag`,
+  options: {
+    trackingIds: [
+      "G-B4E3Q40Z83", // Replace this with your GA4 Measurement ID
+    ],
+    gtagConfig: {
+      anonymize_ip: true,
+    },
+    pluginConfig: {
+      head: true,
+    },
+  },
+},
+
     {
       resolve: `gatsby-plugin-feed`,
       options: {
