@@ -14,7 +14,12 @@ const W = 26
 const H = 13
 const FPS = 18
 const SPEED = 1.0
-const FONT = 9
+
+// Overall size. The grid stays 26x13 — only the cell size changes, so the ball
+// keeps its proportions. Everything else (line-height, footprint) derives from
+// FONT, so this is the one number to tune.
+const SCALE = 0.3
+const FONT = 9 * SCALE
 
 // Fly cycle, in seconds: drift in from the left, settle at the corner,
 // dissolve, then rest before coming back around.

@@ -6,20 +6,18 @@ import WritingIndex from "../components/writing-index"
 import Bio from "../../content/home/bio.mdx"
 import Projects from "../../content/home/projects.mdx"
 
-const Homepage = ({ data: { allPost } }) => {
+const Homepage = ({ data: { allPost, siteBuildMetadata } }) => {
   const posts = allPost.nodes
-  const newest = posts[0]
 
   return (
     <Layout>
       <div className="stagger">
         <header className="masthead">
           <h1 className="masthead__name">Prince Boucher</h1>
-          {newest && (
-            <p className="masthead__meta">
-              Updated <time dateTime={newest.isoDate}>{newest.updated}</time>
-            </p>
-          )}
+          <p className="masthead__meta">
+            Updated{` `}
+            <time dateTime={siteBuildMetadata.isoBuildTime}>{siteBuildMetadata.buildTime}</time>
+          </p>
         </header>
 
         <div className="prose">
@@ -55,9 +53,12 @@ export const query = graphql`
         year
         externalUrl
         date(formatString: "YYYY.MM.DD")
-        updated: date(formatString: "MMM D, YYYY")
         isoDate: date
       }
+    }
+    siteBuildMetadata {
+      buildTime(formatString: "MMM D, YYYY")
+      isoBuildTime: buildTime
     }
   }
 `
