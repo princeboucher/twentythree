@@ -535,6 +535,13 @@ img {
   letter-spacing: 0.02em;
 }
 
+/* The corner ball would sit on top of the masthead on a phone. */
+@media (max-width: 40rem) {
+  .ascii-tennis-ball {
+    display: none;
+  }
+}
+
 /* Signature: the ball keeps turning as long as the page is open. */
 .ball {
   flex: none;
