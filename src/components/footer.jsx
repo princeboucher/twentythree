@@ -11,9 +11,8 @@ const formatter = () =>
   })
 
 /**
- * Signature detail: the current time where Prince actually is, ticking, next to
- * a ball that keeps rolling. Renders empty on the server so the static HTML
- * never ships a stale clock.
+ * The current time where Prince actually is, ticking. Renders without the time
+ * on the server so the static HTML never ships a stale clock.
  */
 const LocalTime = () => {
   const [now, setNow] = React.useState(null)
@@ -28,25 +27,9 @@ const LocalTime = () => {
   }, [])
 
   return (
-    <span className="footer__now">
-      <Ball />
-      <span>{now ? `${now.toLowerCase()} in San Francisco` : `San Francisco`}</span>
-    </span>
+    <span className="footer__now">{now ? `${now.toLowerCase()} in San Francisco` : `San Francisco`}</span>
   )
 }
-
-const Ball = () => (
-  <svg className="ball" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    <path
-      d="M4.2 6.6C7.6 9 8.9 13.4 7.4 17.7M19.8 6.6C16.4 9 15.1 13.4 16.6 17.7"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-  </svg>
-)
 
 const Footer = () => (
   <footer className="footer">

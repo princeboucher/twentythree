@@ -13,8 +13,12 @@ import * as React from "react"
 const W = 26
 const H = 13
 const FPS = 18
-const SPEED = 0.45
+const SPEED = 1.0
 const FONT = 9
+
+// Fly cycle, in seconds: drift in from the left, settle at the corner,
+// dissolve, then rest before coming back around.
+const FLY = { travel: 7, rest: 5, dist: 120 }
 
 const COLORS = {
   light: { fuzz: `#a9b616`, seam: `#a3abb3` },
@@ -167,7 +171,21 @@ const mount = (theme) => {
     raf = requestAnimationFrame(tick)
     if (now - last < interval) return
     last = now
-    el.innerHTML = frame((now / 1000) * SPEED, theme)
+
+    const t = now / 1000
+    const cyc = t % (FLY.travel + FLY.rest)
+
+    // Resting between passes: hold it hidden and skip the render entirely.
+    if (cyc > FLY.travel) {
+      el.style.opacity = `0`
+      return
+    }
+
+    const ease = 1 - (1 - cyc / FLY.travel) ** 2
+    const fade = Math.min(1, cyc / 1.2, (FLY.travel - cyc) / 1.2)
+    el.style.opacity = (fade * 0.95).toFixed(3)
+    el.style.transform = `translateX(${((ease - 1) * FLY.dist).toFixed(1)}px)`
+    el.innerHTML = frame(t * SPEED, theme)
   }
   raf = requestAnimationFrame(tick)
 

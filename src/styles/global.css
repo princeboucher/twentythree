@@ -528,9 +528,6 @@ img {
 }
 
 .footer__now {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
   font-family: var(--font-mono);
   letter-spacing: 0.02em;
 }
@@ -539,21 +536,6 @@ img {
 @media (max-width: 40rem) {
   .ascii-tennis-ball {
     display: none;
-  }
-}
-
-/* Signature: the ball keeps turning as long as the page is open. */
-.ball {
-  flex: none;
-  width: 13px;
-  height: 13px;
-  color: var(--ink-faint);
-  animation: ball-roll 24s linear infinite;
-}
-
-@keyframes ball-roll {
-  to {
-    transform: rotate(360deg);
   }
 }
 
