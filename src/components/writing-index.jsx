@@ -20,6 +20,45 @@ const isRecent = (isoDate) => {
 }
 
 /**
+ * One row. Posts carrying an externalUrl are published elsewhere, so they link
+ * straight out instead of to a page on this site.
+ */
+const Row = ({ post, isNewest }) => {
+  const external = Boolean(post.externalUrl)
+
+  const inner = (
+    <>
+      <span className="index__title">
+        {post.title}
+        {external && (
+          <span className="index__offsite" aria-hidden="true">
+            ↗
+          </span>
+        )}
+        {isNewest && isRecent(post.isoDate) && <span className="index__new">New</span>}
+      </span>
+      <time className="index__date" dateTime={post.isoDate}>
+        {post.date}
+      </time>
+    </>
+  )
+
+  if (external) {
+    return (
+      <a className="index__row" href={post.externalUrl} target="_blank" rel="noopener noreferrer">
+        {inner}
+      </a>
+    )
+  }
+
+  return (
+    <Link className="index__row" to={post.slug}>
+      {inner}
+    </Link>
+  )
+}
+
+/**
  * The writing index: rows of title + date, grouped by year, newest first.
  * Only the most recent post can carry the "New" marker, and only briefly.
  */
@@ -38,17 +77,7 @@ const WritingIndex = ({ posts }) => {
           <ul>
             {entries.map((post) => (
               <li key={post.slug}>
-                <Link className="index__row" to={post.slug}>
-                  <span className="index__title">
-                    {post.title}
-                    {post.slug === newest.slug && isRecent(newest.isoDate) && (
-                      <span className="index__new">New</span>
-                    )}
-                  </span>
-                  <time className="index__date" dateTime={post.isoDate}>
-                    {post.date}
-                  </time>
-                </Link>
+                <Row post={post} isNewest={post.slug === newest.slug} />
               </li>
             ))}
           </ul>

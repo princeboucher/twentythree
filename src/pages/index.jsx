@@ -53,6 +53,7 @@ export const query = graphql`
         slug
         title
         year
+        externalUrl
         date(formatString: "YYYY.MM.DD")
         updated: date(formatString: "MMM D, YYYY")
         isoDate: date

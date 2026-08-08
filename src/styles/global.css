@@ -427,6 +427,18 @@ img {
   letter-spacing: 0.02em;
 }
 
+.index__offsite {
+  display: inline-block;
+  margin-left: 0.3rem;
+  font-size: 0.6875rem;
+  color: var(--ink-faint);
+  vertical-align: 1px;
+}
+
+.index__row:hover .index__offsite {
+  color: inherit;
+}
+
 .index__new {
   display: inline-block;
   margin-left: 0.4rem;

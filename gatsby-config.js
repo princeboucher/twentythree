@@ -100,7 +100,7 @@ module.exports = {
           {
             serialize: ({ query: { site, allPost } }) =>
               allPost.nodes.map((post) => {
-                const url = site.siteMetadata.siteUrl + post.slug
+                const url = post.externalUrl || site.siteMetadata.siteUrl + post.slug
                 const content = `<p>${post.excerpt}</p><p><a href="${url}">Keep reading</a></p>`
 
                 return {
@@ -119,6 +119,7 @@ module.exports = {
       date(formatString: "MMMM D, YYYY")
       excerpt
       slug
+      externalUrl
     }
   }
 }`,

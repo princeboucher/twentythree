@@ -28,6 +28,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       excerpt: String!
       description: String
       canonicalUrl: String
+      externalUrl: String
       tags: [String!]
       banner: File @fileByRelativePath
       timeToRead: Int!
@@ -64,6 +65,7 @@ exports.onCreateNode = ({ node, actions, getNode, createNodeId, createContentDig
       excerpt: frontmatter.excerpt || node.excerpt || ``,
       description: frontmatter.description,
       canonicalUrl: frontmatter.canonicalUrl,
+      externalUrl: frontmatter.externalUrl,
       tags: frontmatter.tags,
       banner: frontmatter.banner,
       timeToRead: Math.max(1, Math.round(stats.minutes)),
@@ -138,6 +140,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       allPost(sort: { date: DESC }) {
         nodes {
           slug
+          externalUrl
           contentFilePath
         }
       }
@@ -155,13 +158,17 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     return
   }
 
-  result.data.allPost.nodes.forEach((post) => {
-    actions.createPage({
-      path: post.slug,
-      component: `${postTemplate}?__contentFilePath=${post.contentFilePath}`,
-      context: { slug: post.slug },
+  // Posts with an externalUrl live somewhere else — they appear in the index
+  // and the feed, but get no page of their own here.
+  result.data.allPost.nodes
+    .filter((post) => !post.externalUrl)
+    .forEach((post) => {
+      actions.createPage({
+        path: post.slug,
+        component: `${postTemplate}?__contentFilePath=${post.contentFilePath}`,
+        context: { slug: post.slug },
+      })
     })
-  })
 
   result.data.allPage.nodes.forEach((page) => {
     actions.createPage({
