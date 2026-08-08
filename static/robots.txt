@@ -1,3 +1,4 @@
 User-agent: *
+Allow: /
 
-sitemap: https://minimal-blog.lekoarts.de/sitemap-index.xml
+Sitemap: https://princeboucher.com/sitemap-index.xml
